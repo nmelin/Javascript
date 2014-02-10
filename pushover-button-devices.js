@@ -1,9 +1,15 @@
+// Pushover setup, set App token, and User key (or Group key)
 var push = require( 'pushover-notifications' );
+var p = new push( {
+	token: "aZVzuxpryiY6JEse9PgtoL8x5xwyeh", 
+	user: "4lvOb4AY2HP8LVFD5t4Iy038Tz0rEM",  
+});
 
+//johnny-five arduino node.js setup
 var five = require( 'johnny-five' );
-
 var board = new five.Board();
 
+//johnny-five board function
 board.on("ready", function() {
 
 	/*Create a new `button` hardware instance.
@@ -16,13 +22,9 @@ board.on("ready", function() {
 	var	 button2 = new five.Button(7);
 	  board.repl.inject({button2: button2});
 
-	// Pushover setup, set App token, and User key (or Group key)
-	var p = new push( {
-		token: "aZVzuxpryiY6JEse9PgtoL8x5xwyeh", 
-		user: "4lvOb4AY2HP8LVFD5t4Iy038Tz0rEM",  
-	});
-
-	//messages for buttons. set message, and optional device, title, priority, sound
+	
+	//pushover messages for buttons. 
+	//set message, and optional device, title, priority, sound
 
 	var msg1 = {
 		device: "Nick-iPhone-5S",
@@ -32,7 +34,6 @@ board.on("ready", function() {
 		priority: 1 // optional
 	};
 
-	//message for button2
 	var msg2 = {
 		device: "iPad-2",
 		message: 'Button 2 Pressed!',
