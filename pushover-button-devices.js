@@ -12,61 +12,67 @@ var board = new five.Board();
 //johnny-five board function
 board.on("ready", function() {
 
-	/*Create a new `button` hardware instance.
+	/*Create a new  hardware instances (buttons, led's, servo's, etc).
 	This example allows the button module to 
 	create a completely default instance */
 
-	var	 button1 = new five.Button(8);
-	  board.repl.inject({button1: button1});
+	var	 
+		button1 = new five.Button(7),
+		button2 = new five.Button(8),
+		led1 		= new 	five.Led(13);
   
-	var	 button2 = new five.Button(7);
-	  board.repl.inject({button2: button2});
+	// Inject defined hardware into the REPL instance
+	this.repl.inject(
+	 	{
+	 		button1 : button1,
+	 		button2 : button2,
+	 		led1 		: led1,
+	 	}
+	);
 
-	
-	//pushover messages for buttons. 
+	//pushover messages map prototype 
 	//set message, and optional device, title, priority, sound
 
-	var msg1 = {
-		device: "Nick-iPhone-5S",
-		message: 'Button 1 Pressed!',
-		title: 'Node-js',
-		sound: 'magic', // optional
-		priority: 1 // optional
-	};
+	function Push_map( message ) {
+		this.message 	= message;
+	}
+	Push_map.prototype.sound = 'magic';
+	Push_map.prototype.priority = 1;
+	Push_map.prototype.device = "Nick-iPhone-5S";
+	Push_map.prototype.title = "Node-js";
 
-	var msg2 = {
-		device: "iPad-2",
-		message: 'Button 2 Pressed!',
-		title: 'Node-js',
-		sound: 'magic', // optional
-		priority: 1 // optional
-	};
+//-------- START BUTTON EVENTS -------- 
+	// "down" : the button is pressed
+	// "up" 	: the button is not pressed
+	// "hold" : the button is held down
 
-	/* Button Events. 
-	"down" the button is pressed, 
-	"up" the button is not pressed, 
-	"hold" the butten is held*/
-
+	// Begin button1 event
 	button1.on("down", function() {
-		p.send( msg1, function( err, result ) {
-		if ( err ) {
-			throw err;
-		}
+		var pin = this.pin;
+		var msg = new Push_map(
+			"Button Pressed! (Pin " + pin + ")"
+			);
 
-		console.log( result );
+		p.send( msg, function ( err, result ) {
+			if ( err ) { throw err; }
+			//console.log( "Button Pressed (Pin " + pin + ") " + result );
 		});
 	});
+	// End button1 event
 
-
+	// Begin button2 event
 	button2.on("down", function() {
-		p.send( msg2, function( err, result ) {
-		if ( err ) {
-			throw err;
-		}
+		var pin = this.pin;
+		var msg = new Push_map(
+			"Button Pressed! (Pin " + pin + ")"
+			);
 
-		console.log( result );
+		p.send( msg, function ( err, result ) {
+			if ( err ) { throw err; }
+			//console.log( "Button Pressed (Pin " + pin + ") " + result );
 		});
 	});
+	// End button1 event
+//-------- END BUTTON EVENTS -------- 
 
-  
 }); 
